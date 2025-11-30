@@ -1,5 +1,7 @@
 // constants/theme.ts
-export const colors = {
+
+// 🎨 Paleta base que usarás en componentes simples
+const baseColors = {
   navy: "#0C1326",
   teal: "#0f3b3a",
   mint: "#1ABC9C",
@@ -13,3 +15,22 @@ export const colors = {
   donutYellow: "#F4C542",
   donutBlue: "#5BA4D8",
 };
+
+// 👉 Export para componentes sencillos (como BackHeader)
+export const colors = baseColors;
+
+// 👉 Objeto Colors con variantes light/dark para useThemeColor
+const Colors = {
+  light: {
+    ...baseColors,
+    background: "#FFFFFF",
+  },
+  dark: {
+    ...baseColors,
+    background: "#0C1326",
+  },
+};
+
+export default Colors;
+
+export type ThemeColorName = keyof typeof Colors.light;
