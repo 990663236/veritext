@@ -1,0 +1,24 @@
+# Node
+node_modules/
+
+# Python
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+
+# Entornos
+.env
+
+# VSCode
+.vscode/
+
+# Expo / React Native cache
+.expo/
+.expo-shared/
+dist/
+build/
+
+# Otros
+*.log
