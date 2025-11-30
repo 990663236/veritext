@@ -21,7 +21,7 @@ export default function Result() {
   const { payload } = useLocalSearchParams<{ payload: string }>();
   const data = payload ? JSON.parse(payload) : null;
 
-  // Probabilidad de IA desde el backend (score o buckets.ai)
+
   const rawScore =
     typeof data?.score === "number"
       ? data.score
@@ -29,7 +29,7 @@ export default function Result() {
       ? data.buckets.ai
       : 0;
 
-  // Normalizamos al rango [0, 1]
+  // rango [0, 1]
   const pIA = Math.min(Math.max(rawScore, 0), 1);
   const pHum = 1 - pIA;
 
@@ -51,7 +51,7 @@ export default function Result() {
     detailLabel = `Probabilidad de IA alta (${iaPct} %) y probabilidad de humano baja (${humPct} %).`;
   }
 
-  // Donut con solo 2 segmentos: humano vs IA
+  
   const segs = [
     { value: pHum, color: colors.donutPink },
     { value: pIA, color: colors.donutBlue },

@@ -24,13 +24,13 @@ n_samples = len(df)
 n_classes = df["label"].nunique()
 print(f"🔎 Muestras: {n_samples} | Clases: {n_classes}")
 
-# 2) Definir pipeline TF-IDF + Regresión Logística
+
 pipe = Pipeline([
     ("tfidf", TfidfVectorizer(
         lowercase=True,
         ngram_range=(1, 2),
         max_df=0.9,
-        min_df=1,  # pon 1 si tienes muy pocos textos
+        min_df=1,
     )),
     ("clf", LogisticRegression(
         max_iter=200,
@@ -39,7 +39,7 @@ pipe = Pipeline([
     )),
 ])
 
-# 3) Si hay datos suficientes, separamos train/test con stratify
+
 if n_samples >= 10 and n_classes >= 2:
     print("🚀 Entrenando con train/test split (con stratify)...")
     X_train, X_test, y_train, y_test = train_test_split(
@@ -59,7 +59,7 @@ else:
     print("   Se entrenará el modelo usando TODO el dataset.")
     pipe.fit(X, y)
 
-# 5) Guardar pipeline completo
+
 MODEL_PATH = BASE_DIR / "model.joblib"
 dump(pipe, MODEL_PATH)
 print(f"✅ Modelo guardado en {MODEL_PATH}")

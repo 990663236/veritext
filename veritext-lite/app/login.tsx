@@ -42,9 +42,9 @@ export default function Login() {
     try {
       setLoading(true);
       Keyboard.dismiss();
-      // login guarda el token en AsyncStorage (lib/api.ts)
+
       await login(e, p);
-      // navega al home (ajusta la ruta si tu pantalla es otra)
+
       router.replace("/home");
     } catch (err: any) {
       const msg =
@@ -59,7 +59,7 @@ export default function Login() {
 
   const goToRegister = () => {
     if (loading) return;
-    router.push("/register"); // pantalla de registro (app/register.tsx)
+    router.push("/register"); // pantalla de registro 
   };
 
   return (

@@ -13,20 +13,17 @@ import * as FileSystem from "expo-file-system";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { analyzeText } from "../lib/api";
-import { decode as atob } from "base-64"; // 👈 para PDF nativo
+import { decode as atob } from "base-64"; 
 
-// ⚠️ IMPORTANTE:
-// npm install pdfjs-dist@3.11.174 base-64
 
 let pdfjsWeb: any | null = null;
 let pdfjsNative: any | null = null;
 
-// ---------- helper para contar palabras útiles ----------
-const MIN_WORDS = 30; // umbral mínimo de palabras "reales"
+
+const MIN_WORDS = 30; 
 
 function countUsefulWords(text: string): number {
-  // 1) colapsar espacios
-  // 2) quitar símbolos raros, dejar letras/números/espacios
+
   const cleaned = text
     .replace(/\s+/g, " ")
     .replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s]/g, " ");
@@ -36,7 +33,7 @@ function countUsefulWords(text: string): number {
 
 async function getPdfJsWeb() {
   if (!pdfjsWeb) {
-    // @ts-ignore – pdfjs-dist no tiene tipos para este build
+
     pdfjsWeb = await import("pdfjs-dist/build/pdf");
     pdfjsWeb.GlobalWorkerOptions.workerSrc =
       "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
@@ -46,7 +43,7 @@ async function getPdfJsWeb() {
 
 async function getPdfJsNative() {
   if (!pdfjsNative) {
-    // @ts-ignore – pdfjs-dist no tiene tipos para este build
+
     pdfjsNative = await import("pdfjs-dist/build/pdf");
   }
   return pdfjsNative;
@@ -69,7 +66,7 @@ export default function Upload() {
     for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);
       const content = await page.getTextContent();
-      // getTextContent YA ignora las imágenes; solo devuelve ítems de texto
+
       text +=
         (content.items as any[])
           .map((t: any) => ("str" in t ? t.str : ""))
@@ -83,12 +80,12 @@ export default function Upload() {
     const pdfjsLib = await getPdfJsNative();
     const { getDocument } = pdfjsLib;
 
-    // Leer el archivo como base64 (VERSIÓN QUE TE FUNCIONABA)
+
     const base64 = await FileSystem.readAsStringAsync(uri, {
       encoding: "base64",
     });
 
-    // Decodificar base64 a binario
+
     const bin = atob(base64);
     const bytes = new Uint8Array(bin.length);
     for (let i = 0; i < bin.length; i++) {
@@ -140,7 +137,7 @@ export default function Upload() {
           content = await res.text();
         } else {
           content = await FileSystem.readAsStringAsync(file.uri, {
-            encoding: "utf8", // como lo tenías
+            encoding: "utf8",
           });
         }
       } else if (isPdf) {
@@ -161,7 +158,7 @@ export default function Upload() {
         return;
       }
 
-      // 🔍 NUEVO: evitar PDFs que son solo imágenes o casi sin texto
+
       const nWords = countUsefulWords(content);
       if (nWords < MIN_WORDS) {
         Alert.alert(

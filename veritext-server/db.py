@@ -5,8 +5,8 @@ from sqlalchemy.orm import sessionmaker, DeclarativeBase
 from dotenv import load_dotenv
 import os
 
-# Carga el .env desde la carpeta del backend
-load_dotenv()  # si algún día cambias el cwd, ver nota abajo
+
+load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
@@ -14,8 +14,8 @@ if not DATABASE_URL:
 
 engine = create_engine(
     DATABASE_URL,
-    pool_pre_ping=True,   # evita 'MySQL server has gone away'
-    pool_recycle=3600,    # recicla conexiones cada 1h
+    pool_pre_ping=True,
+    pool_recycle=3600,
 )
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 

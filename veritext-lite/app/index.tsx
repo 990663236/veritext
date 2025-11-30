@@ -14,8 +14,8 @@ export default function Index() {
         const t = await AsyncStorage.getItem("token");
         if (!t) { router.replace("/login"); return; }
 
-        await setToken(t);         // asegura que el interceptor lo tenga
-        await verify();            // llama GET /auth/verify
+        await setToken(t);         
+        await verify();            
         router.replace("/home");
       } catch {
         await AsyncStorage.removeItem("token");

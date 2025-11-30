@@ -11,7 +11,7 @@ from schemas import AnalyzeReq, AnalyzeRes
 
 router = APIRouter(prefix="/analyze", tags=["analyze"])
 
-MODEL = None  # se cargará en model.joblib
+MODEL = None 
 
 
 def _extract_token(auth: Optional[str]) -> str:
@@ -51,17 +51,17 @@ def analyze_text(
             detail="El texto no puede estar vacío",
         )
 
-    # --- usuario (si hay token) ---
+
     token = _extract_token(Authorization)
     user: Optional[User] = None
     if token:
         user = db.query(User).filter(User.token == token).first()
 
-    # --- modelo (real o dummy) ---
+
     model = _lazy_load_model()
     if model:
         # TODO: aquí va tu lógica real con el modelo
-        # prob = float(model.predict_proba([txt])[0][1])
+
         prob = min(len(txt) / 1000.0, 1.0)
     else:
         prob = min(len(txt) / 1000.0, 1.0)

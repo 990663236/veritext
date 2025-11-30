@@ -1,18 +1,13 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-/**
- * Config por ENV:
- * EXPO_PUBLIC_API_BASE   -> ej: http://127.0.0.1:8000
- * EXPO_PUBLIC_API_PREFIX -> ej: /api (si usas /api/...)
- * EXPO_PUBLIC_ANALYZE    -> ej: /analyze/text
- */
+
 const RAW_BASE = process.env.EXPO_PUBLIC_API_BASE || "http://127.0.0.1:8000";
 const API_PREFIX = (process.env.EXPO_PUBLIC_API_PREFIX || "").replace(/\/+$/, "");
 const ANALYZE_PATH =
   process.env.EXPO_PUBLIC_ANALYZE || "/analyze/text";
 
-// Normaliza baseURL sin barra final
+// Normaliza baseURL
 export const API_BASE = RAW_BASE.replace(/\/+$/, "");
 
 function buildPath(path: string) {

@@ -1,11 +1,11 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { router } from "expo-router";
-import { Ionicons } from "@expo/vector-icons"; // viene con Expo
+import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../constants/theme";
 
 export default function BackHeader({ title }: { title?: string }) {
-  const goHome = () => router.replace("/"); // ir SIEMPRE al menú principal
+  const goHome = () => router.replace("/");
 
   return (
     <View style={s.wrap}>
@@ -17,8 +17,7 @@ export default function BackHeader({ title }: { title?: string }) {
         style={s.iconBtn}
       >
         <Ionicons name="arrow-back" size={26} color={colors.teal} />
-        {/* Si no quieres usar iconos, puedes usar:
-            <Text style={{fontSize:24,color:colors.teal}}>←</Text> */}
+
       </TouchableOpacity>
 
       {title ? <Text style={s.title}>{title}</Text> : null}

@@ -18,15 +18,14 @@ class User(Base):
     )
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
 
-    # en MySQL tienes varchar(128), así que lo dejamos igual
+
     token: Mapped[str | None] = mapped_column(String(128), nullable=True)
 
-    # DATETIME(fsp=6) para microsegundos en MySQL
+
     created_at: Mapped[datetime] = mapped_column(
         DATETIME(fsp=6), server_default=func.now(), nullable=False
     )
 
-    # relación con historial de análisis
     analyses = relationship("Analysis", back_populates="user")
 
 
@@ -42,13 +41,13 @@ class Analysis(Base):
         nullable=True,
         index=True,
     )
-    # texto analizado
+
     text: Mapped[str] = mapped_column(Text, nullable=False)
 
-    # score del modelo (0–1)
+
     score: Mapped[float] = mapped_column(Float, nullable=False)
 
-    # guardamos las top_words como JSON en texto
+
     top_words: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(

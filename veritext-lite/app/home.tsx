@@ -11,7 +11,7 @@ import { router } from "expo-router";
 import { colors } from "../constants/theme";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const LOGIN_ROUTE = "/login"; // ajusta si tu ruta es otra
+const LOGIN_ROUTE = "/login";
 
 const clearSession = async () => {
   try {

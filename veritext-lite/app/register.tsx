@@ -21,7 +21,7 @@ export default function RegisterScreen() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // siempre mandamos al login, no usamos router.back()
+
   const goBack = () => router.replace("/login");
   const goToLogin = () => router.replace("/login");
 
@@ -29,7 +29,7 @@ export default function RegisterScreen() {
     if (loading) return;
 
     const cleanEmail = email.trim().toLowerCase();
-    setErrorMsg(null); // limpiamos error anterior
+    setErrorMsg(null);
 
     if (!cleanEmail || !password || !password2) {
       setErrorMsg("Completa todos los campos.");
@@ -156,7 +156,7 @@ export default function RegisterScreen() {
             style={s.input}
           />
 
-          {/* Mensaje de error visible en la pantalla */}
+          {/* Mensaje de error */}
           {errorMsg && <Text style={s.errorText}>{errorMsg}</Text>}
 
           {/* Botón principal */}

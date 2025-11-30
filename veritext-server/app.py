@@ -155,26 +155,21 @@ def verify(Authorization: Optional[str] = Header(None), db: Session = Depends(ge
     return {"ok": True, "email": user.email, "id": user.id}
 
 
-# =========================
-#     HEALTH CHECK
-# =========================
+
 
 @app.get("/")
 def health():
     return {"ok": True, "service": "Veritext API"}
 
 
-# =========================
-#     MODELO ENTRENADO
-# =========================
 
-MODEL = None  # se carga la primera vez que se use
+MODEL = None 
 
 def _lazy_load_model():
     """Carga el modelo TF-IDF + Regresión Logística desde model.joblib."""
     global MODEL
     if MODEL is None:
-        from joblib import load  # type: ignore
+        from joblib import load
         try:
             MODEL = load("model.joblib")
             print("[analyze] Modelo cargado:", type(MODEL))
@@ -191,16 +186,13 @@ def _lazy_load_model():
             )
     return MODEL
 
-# -------- helper NUEVO para ver si hay texto suficiente --------
+
 def _texto_suficiente(txt: str, min_words: int = 30) -> bool:
-    # quitamos símbolos raros, dejamos letras/números/espacios
+
     cleaned = re.sub(r"[^\wÁÉÍÓÚáéíóúÑñ\s]", " ", txt, flags=re.UNICODE)
     words = [w for w in cleaned.split() if w]
     return len(words) >= min_words
 
-# =========================
-#        ANÁLISIS
-# =========================
 
 @app.post("/analyze/text", response_model=AnalyzeRes, tags=["analyze"])
 def analyze_text(
@@ -215,8 +207,7 @@ def analyze_text(
             detail="El texto no puede estar vacío",
         )
 
-    # 👇 NUEVO: solo aplicar el filtro fuerte a textos MUY largos (típico PDF)
-    # Si el texto es corto/mediano (lo que escribes en la app), se analiza normal.
+
     if len(txt) > 2000 and not _texto_suficiente(txt, min_words=30):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -227,7 +218,6 @@ def analyze_text(
         )
 
 
-    # Usuario (si viene token)
     token = _extract_token(Authorization)
     user: Optional[User] = None
     if token:
@@ -235,7 +225,7 @@ def analyze_text(
 
     model = _lazy_load_model()
     try:
-        proba = model.predict_proba([txt])[0][1]  # prob de IA (clase 1)
+        proba = model.predict_proba([txt])[0][1]
         prob = float(proba)
     except Exception as e:
         print("[analyze] Error al predecir:", repr(e))
@@ -262,9 +252,7 @@ def analyze_text(
         buckets={"human": 1 - prob, "ai": prob},
         top_words=top_words,
     )
-# =========================
-#        HISTORIAL
-# =========================
+
 from typing import Optional
 import json
 from fastapi import Header, HTTPException, Depends

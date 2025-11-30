@@ -9,10 +9,9 @@ AI_CSV = DATA_DIR / "awesome_prompts.csv"
 HUMAN_CSV = DATA_DIR / "human_arxiv.csv"
 OUT_CSV = DATA_DIR / "textos.csv"
 
-# === CONFIGURACIÓN ===
-# número máximo de ejemplos de cada clase
-N_AI = 5000      # puedes subirlo si tu PC aguanta más
-N_HUMAN = 5000   # idem
+
+N_AI = 5000
+N_HUMAN = 5000
 
 def main():
     # ----------------- TEXTOS IA (ChatGPT prompts) -----------------
@@ -22,7 +21,7 @@ def main():
     if "prompt" not in df_ai.columns:
         raise SystemExit(f"No se encontró la columna 'prompt' en {AI_CSV}")
 
-    # dejamos solo la columna de texto y renombramos a 'texto'
+
     df_ai = df_ai.rename(columns={"prompt": "texto"})
     df_ai["label"] = 1   # 1 = IA
 
@@ -35,25 +34,25 @@ def main():
     # ----------------- TEXTOS HUMANOS (arXiv) -----------------
     print("📂 Leyendo HUMANO desde:", HUMAN_CSV)
 
-    # sólo cargamos title y abstract, y limitado a N_HUMAN filas
+
     df_h = pd.read_csv(
         HUMAN_CSV,
         usecols=["title", "abstract"],
         nrows=N_HUMAN,
     )
 
-    # rellenamos nulos con cadena vacía
+
     df_h["title"] = df_h["title"].fillna("")
     df_h["abstract"] = df_h["abstract"].fillna("")
 
-    # combinamos título + abstract en una sola columna de texto
+
     df_h["texto"] = (df_h["title"] + ". " + df_h["abstract"]).str.strip()
     df_h = df_h.drop(columns=["title", "abstract"])
 
-    # eliminamos filas sin texto
+
     df_h = df_h[df_h["texto"].str.len() > 0]
 
-    df_h["label"] = 0   # 0 = humano
+    df_h["label"] = 0
     df_h = df_h[["texto", "label"]]
 
     print("✅ Ejemplos humanos:", len(df_h))
